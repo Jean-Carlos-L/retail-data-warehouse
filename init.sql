@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS fact_sales CASCADE;
 DROP TABLE IF EXISTS dim_customer CASCADE;
 DROP TABLE IF EXISTS dim_product CASCADE;
 DROP TABLE IF EXISTS dim_payment CASCADE;
+DROP TABLE IF EXISTS dim_date CASCADE;
 DROP TABLE IF EXISTS dim_mall CASCADE;
 
 -- ======================
@@ -34,7 +35,19 @@ CREATE TABLE dim_product (
 CREATE TABLE dim_payment (
     payment_id SERIAL PRIMARY KEY,
     payment_method VARCHAR(20),
-    invoice_date DATE
+);
+
+-- ======================
+-- Dimensión Fecha
+-- ======================
+CREATE TABLE dim_date (
+    date_id SERIAL PRIMARY KEY,
+    date DATE,
+    year INT,
+    month INT,
+    day INT,
+    day_of_week INT,
+    quarter INT
 );
 
 -- ======================
@@ -54,11 +67,13 @@ CREATE TABLE fact_sales (
     product_id INT NOT NULL,
     payment_id INT NOT NULL,
     mall_id INT NOT NULL,
+    date_id INT NOT NULL,
     total_amount NUMERIC(12,2),
 
     -- Definición de llaves foráneas
     CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES dim_customer(customer_id),
     CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES dim_product(product_id),
     CONSTRAINT fk_payment FOREIGN KEY (payment_id) REFERENCES dim_payment(payment_id),
-    CONSTRAINT fk_mall FOREIGN KEY (mall_id) REFERENCES dim_mall(mall_id)
+    CONSTRAINT fk_mall FOREIGN KEY (mall_id) REFERENCES dim_mall(mall_id),
+    CONSTRAINT fk_date FOREIGN KEY (date_id) REFERENCES dim_date(date_id)
 );
