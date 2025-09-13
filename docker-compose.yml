@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_db_warehouse
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: "X7vpQ2rtL9sWzeB8"
+      POSTGRES_DB: retail_data_warehouse
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  db_data:
